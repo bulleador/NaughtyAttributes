@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using EasyButtons.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,8 +16,12 @@ namespace NaughtyAttributes.Editor
         private IEnumerable<PropertyInfo> _nativeProperties;
         private Dictionary<string, SavedBool> _foldouts = new Dictionary<string, SavedBool>();
 
+        private ButtonsDrawer _buttonsDrawer;
+
         protected virtual void OnEnable()
         {
+            _buttonsDrawer = new ButtonsDrawer(target);
+            
             _nonSerializedFields = ReflectionUtility.GetAllFields(
                 target, f => f.GetCustomAttributes(typeof(ShowNonSerializedFieldAttribute), true).Length > 0);
 
@@ -45,6 +50,8 @@ namespace NaughtyAttributes.Editor
 
             DrawNonSerializedFields();
             DrawNativeProperties();
+            
+            _buttonsDrawer.DrawButtons(targets);
         }
 
         protected void GetSerializedProperties(ref List<SerializedProperty> outSerializedProperties)
