@@ -13,8 +13,7 @@ namespace NaughtyAttributes.Test
         public string name0;
 
         public AnimatorParamNest1 nest1;
-
-        [Button("Log 'hash0' and 'name0'")]
+        
         private void TestLog()
         {
             Debug.Log($"hash0 = {hash0}");

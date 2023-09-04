@@ -8,8 +8,7 @@ namespace NaughtyAttributes.Test
         public string inputAxis0;
 
         public InputAxisNest1 nest1;
-
-        [Button]
+        
         private void LogInputAxis0()
         {
             Debug.Log(inputAxis0);

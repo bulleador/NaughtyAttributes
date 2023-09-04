@@ -13,7 +13,6 @@ namespace NaughtyAttributes.Editor
         private List<SerializedProperty> _serializedProperties = new List<SerializedProperty>();
         private IEnumerable<FieldInfo> _nonSerializedFields;
         private IEnumerable<PropertyInfo> _nativeProperties;
-        private IEnumerable<MethodInfo> _methods;
         private Dictionary<string, SavedBool> _foldouts = new Dictionary<string, SavedBool>();
 
         protected virtual void OnEnable()
@@ -23,9 +22,6 @@ namespace NaughtyAttributes.Editor
 
             _nativeProperties = ReflectionUtility.GetAllProperties(
                 target, p => p.GetCustomAttributes(typeof(ShowNativePropertyAttribute), true).Length > 0);
-
-            _methods = ReflectionUtility.GetAllMethods(
-                target, m => m.GetCustomAttributes(typeof(ButtonAttribute), true).Length > 0);
         }
 
         protected virtual void OnDisable()
@@ -49,7 +45,6 @@ namespace NaughtyAttributes.Editor
 
             DrawNonSerializedFields();
             DrawNativeProperties();
-            DrawButtons();
         }
 
         protected void GetSerializedProperties(ref List<SerializedProperty> outSerializedProperties)
@@ -170,26 +165,7 @@ namespace NaughtyAttributes.Editor
                 }
             }
         }
-
-        protected void DrawButtons(bool drawHeader = false)
-        {
-            if (_methods.Any())
-            {
-                if (drawHeader)
-                {
-                    EditorGUILayout.Space();
-                    EditorGUILayout.LabelField("Buttons", GetHeaderGUIStyle());
-                    NaughtyEditorGUI.HorizontalLine(
-                        EditorGUILayout.GetControlRect(false), HorizontalLineAttribute.DefaultHeight, HorizontalLineAttribute.DefaultColor.GetColor());
-                }
-
-                foreach (var method in _methods)
-                {
-                    NaughtyEditorGUI.Button(serializedObject.targetObject, method);
-                }
-            }
-        }
-
+        
         private static IEnumerable<SerializedProperty> GetNonGroupedProperties(IEnumerable<SerializedProperty> properties)
         {
             return properties.Where(p => PropertyUtility.GetAttribute<IGroupAttribute>(p) == null);

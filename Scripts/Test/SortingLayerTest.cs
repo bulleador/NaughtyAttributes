@@ -11,8 +11,7 @@ namespace NaughtyAttributes.Test
         public string layerName0;
 
         public SortingLayerNest1 nest1;
-
-        [Button]
+        
         public void DebugLog()
         {
             Debug.LogFormat("{0} = {1}", nameof(layerNumber0), layerNumber0);

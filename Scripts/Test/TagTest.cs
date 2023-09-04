@@ -8,8 +8,7 @@ namespace NaughtyAttributes.Test
         public string tag0;
 
         public TagNest1 nest1;
-
-        [Button]
+        
         private void LogTag0()
         {
             Debug.Log(tag0);

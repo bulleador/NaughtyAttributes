@@ -131,73 +131,7 @@ namespace NaughtyAttributes.Editor
                 dropdownField.SetValue(target, newValue);
             }
         }
-
-        public static void Button(UnityEngine.Object target, MethodInfo methodInfo)
-        {
-            bool visible = ButtonUtility.IsVisible(target, methodInfo);
-            if (!visible)
-            {
-                return;
-            }
-
-            if (methodInfo.GetParameters().All(p => p.IsOptional))
-            {
-                ButtonAttribute buttonAttribute = (ButtonAttribute)methodInfo.GetCustomAttributes(typeof(ButtonAttribute), true)[0];
-                string buttonText = string.IsNullOrEmpty(buttonAttribute.Text) ? ObjectNames.NicifyVariableName(methodInfo.Name) : buttonAttribute.Text;
-
-                bool buttonEnabled = ButtonUtility.IsEnabled(target, methodInfo);
-
-                EButtonEnableMode mode = buttonAttribute.SelectedEnableMode;
-                buttonEnabled &=
-                    mode == EButtonEnableMode.Always ||
-                    mode == EButtonEnableMode.Editor && !Application.isPlaying ||
-                    mode == EButtonEnableMode.Playmode && Application.isPlaying;
-
-                bool methodIsCoroutine = methodInfo.ReturnType == typeof(IEnumerator);
-                if (methodIsCoroutine)
-                {
-                    buttonEnabled &= (Application.isPlaying ? true : false);
-                }
-
-                EditorGUI.BeginDisabledGroup(!buttonEnabled);
-
-                if (GUILayout.Button(buttonText, _buttonStyle))
-                {
-                    object[] defaultParams = methodInfo.GetParameters().Select(p => p.DefaultValue).ToArray();
-                    IEnumerator methodResult = methodInfo.Invoke(target, defaultParams) as IEnumerator;
-
-                    if (!Application.isPlaying)
-                    {
-                        // Set target object and scene dirty to serialize changes to disk
-                        EditorUtility.SetDirty(target);
-
-                        PrefabStage stage = PrefabStageUtility.GetCurrentPrefabStage();
-                        if (stage != null)
-                        {
-                            // Prefab mode
-                            EditorSceneManager.MarkSceneDirty(stage.scene);
-                        }
-                        else
-                        {
-                            // Normal scene
-                            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-                        }
-                    }
-                    else if (methodResult != null && target is MonoBehaviour behaviour)
-                    {
-                        behaviour.StartCoroutine(methodResult);
-                    }
-                }
-
-                EditorGUI.EndDisabledGroup();
-            }
-            else
-            {
-                string warning = typeof(ButtonAttribute).Name + " works only on methods with no parameters";
-                HelpBox_Layout(warning, MessageType.Warning, context: target, logToConsole: true);
-            }
-        }
-
+        
         public static void NativeProperty_Layout(UnityEngine.Object target, PropertyInfo property)
         {
             object value = property.GetValue(target, null);
