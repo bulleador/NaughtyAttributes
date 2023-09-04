@@ -1,5 +1,8 @@
 ## Fork
-This fork was created to make NaughtyAttributes compatibile with [madsbangh's EasyButtons](https://github.com/madsbangh/EasyButtons) by removing the Button attribute.
+This fork was created to make NaughtyAttributes compatibile with [madsbangh's EasyButtons](https://github.com/madsbangh/EasyButtons) 
+by removing the `NaughtyAttributes.ButtonAttribute` attribute and moving all `EasyButtons.ObjectEditor` code to `NaughtyAttributes.NaughtyInspector` as they're both custom editors for `UnityEngine.Object` and only one editor is allowed for one type.
+
+`EasyButtons` is now a dependency of `NaughtyAttributes` and it has been added to the package manifest.
 
 # NaughtyAttributes
 [![Unity 2019.4+](https://img.shields.io/badge/unity-2019.4%2B-blue.svg)](https://unity3d.com/get-unity/download)
