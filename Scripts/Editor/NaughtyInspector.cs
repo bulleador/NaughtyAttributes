@@ -78,16 +78,9 @@ namespace NaughtyAttributes.Editor
             foreach (var property in GetNonGroupedProperties(_serializedProperties))
             {
                 if (property.name.Equals("m_Script", System.StringComparison.Ordinal))
-                {
-                    using (new EditorGUI.DisabledScope(disabled: true))
-                    {
-                        EditorGUILayout.PropertyField(property);
-                    }
-                }
-                else
-                {
-                    NaughtyEditorGUI.PropertyField_Layout(property, includeChildren: true);
-                }
+                    continue;
+
+                NaughtyEditorGUI.PropertyField_Layout(property, includeChildren: true);
             }
 
             // Draw grouped serialized properties
